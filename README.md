@@ -24,3 +24,10 @@
 ```
    docker compose up
 ```
+
+- Update liff/index.html
+```
+    const liffId = '1654109634-mOJGk7bV' // Replace with your LIFF ID
+    const serverUrl = 'https://d8da-61-7-151-115.ngrok-free.app/register'
+
+```
