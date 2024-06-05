@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Register</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet" type="text/css">
+    <link href="https://cdn.jsdelivr.net/npm/quasar@2.16.4/dist/quasar.prod.css" rel="stylesheet" type="text/css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  </head>
+
+  <body>
+    <div id="q-app">
+        <div class="row bg-light-green window-height window-width justify-center items-start q-pt-md ">
+            <div class="column">
+                <div class="row justify-center">
+                    <q-avatar size="100px">
+                        <q-img :src="profilePictureUrl" />
+                    </q-avatar>
+                </div>
+                <div class="row justify-center">
+                    <h5 class="text-white q-my-md">{{ displayName }}</h5>
+                </div>
+                
+                <div class="row full-width justify-center">
+                    <q-card square bordered class="q-pa-lg shadow-1">
+                        <q-card-section class="text-center q-mb-sm q-px-md q-py-none">
+                            <q-input full-width square filled clearable v-model="email" type="email" label="EGAT ID">
+                                <template v-slot:prepend>
+                                    <q-icon name="mail" />
+                                </template>
+                            </q-input>
+                        </q-card-section>
+                        <q-card-section class="text-center q-mb-md q-px-md q-py-none">
+                            <q-input full-width square filled clearable v-model="password" type="password" label="Password" >
+                                <template v-slot:prepend>
+                                    <q-icon name="key" />
+                                </template>
+                            </q-input>
+                        </q-card-section>
+                        <q-card-actions class="q-px-md">
+                            <q-btn unelevated color="light-green-7" size="lg" class="full-width" label="Register"  @click="handleClick"/>
+                        </q-card-actions>
+                        <q-card-section class="text-center q-pa-none">
+                            <p class="text-grey-6">Not reigistered? Created an Account</p>
+                        </q-card-section>
+                    </q-card>
+                </div>
+            
+            </div>
+        </div>    
+    </div>
+
+    <!-- Add the following at the end of your body tag -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.prod.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/quasar@2.16.4/dist/quasar.umd.prod.js"></script>
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <script>
+        const { ref, onMounted } = Vue;
+        const app = Vue.createApp({
+        setup () {
+            const email = ref('');
+            const password = ref('');
+            const profilePictureUrl = ref('https://cdn.quasar.dev/img/boy-avatar.png'); 
+            const displayName = ref('kongdej')
+            const liffId = '1654109634-mOJGk7bV' // Replace with your LIFF ID
+            const serverUrl = 'https://d8da-61-7-151-115.ngrok-free.app/register'
+
+            const handleClick = async () => {
+                console.log('submit:',email.value,password.value)
+                
+                try {
+                    const response = await axios.post(serverUrl, {
+                        email: email.value,
+                        password: password.value,
+                    });
+                    console.log('User registered:', response.data);
+                } catch (error) {
+                    console.error('Registration failed:', error);
+                }
+            };
+
+            const initializeLiff = async () => {
+                try {
+                    await liff.init({ liffId }); 
+                    if (liff.isLoggedIn()) {
+                        const profile = await liff.getProfile();
+                        profilePictureUrl.value = profile.pictureUrl;
+                        displayName.value = profile.displayName;
+                    }
+                    else {
+                        liff.login()
+                    }
+                } catch (error) {
+                    console.error('LIFF initialization failed', error);
+                }
+            };
+
+
+            onMounted(() => {
+                initializeLiff();
+            });
+
+            return {
+                email,
+                password,
+                handleClick,
+                profilePictureUrl,
+                displayName
+            }
+        }
+      })
+
+      app.use(Quasar)
+      app.mount('#q-app')
+    </script>
+    <style>
+        .q-card {
+          width: 360px;
+        }
+    </style>
+  </body>
+</html>
