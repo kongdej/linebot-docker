@@ -3,17 +3,34 @@
 ### Installation
 - Prerequisite
     - Install Git
-    - Create LINE BOT and LINE Login
     - Install ngrok
+    - Install docker
+    - Install vscode and docker plugin
+    - Create LINE BOT and LINE Login
 
 - Download
 ```
     git clone https://github.com/kongdej/linebot-docker
 ```
 
+- Run ngrok 
+```
+    ngrok http 8000
+```
+
+- Update ngrok url to LINE Message API
+```
+    Webhook URL: https://d8da-61-7-151-115.ngrok-free.app/bot
+```
+
+- Update ngrok url to LINE Login (LIFF)
+```
+    Endpoint URL: https://d8da-61-7-151-115.ngrok-free.app/liff
+```
+
 - Update .env
 ```
-    HOST =  https://9086-1-46-203-66.ngrok-free.app
+    HOST = https://d8da-61-7-151-115.ngrok-free.app
     PORT = 8000
 
     BOT_ACCESS_TOKEN = xxxxxxxxxxxxxxxxxxxxxxxxx
